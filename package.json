@@ -1,0 +1,12 @@
+{
+  "name": "ajem-notify",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serveur d'envoi des notifications push AJEM (Vercel)",
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
