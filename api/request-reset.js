@@ -1,7 +1,9 @@
 // api/request-reset.js — étape 1 : envoie un code à 6 chiffres par email.
 //
-// Réponse volontairement identique que le compte existe ou non (ou ne soit
-// pas encore activé) : on ne révèle pas quels emails sont inscrits.
+// Aucun email n'est envoyé si :
+//   - l'adresse n'est pas dans la liste des membres  -> 404 not_found
+//   - le membre n'a pas encore créé son compte       -> 409 not_activated
+// (l'écran de connexion de l'app donne déjà ces mêmes indications).
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const { getAdmin, findUserByEmail, hashOtp } = require('../lib/common');
@@ -30,8 +32,18 @@ module.exports = async (req, res) => {
     const user = userDoc ? userDoc.data() : null;
     const activated = user && typeof user.passwordHash === 'string' && user.passwordHash.length > 0;
 
-    // Compte inconnu ou non activé : réponse neutre, aucun email envoyé.
-    if (!userDoc || !activated) return res.status(200).json({ ok: true });
+    if (!userDoc) {
+      return res.status(404).json({
+        code: 'not_found',
+        error: "Cet email n'est pas enregistré dans la liste des membres.",
+      });
+    }
+    if (!activated) {
+      return res.status(409).json({
+        code: 'not_activated',
+        error: "Ce membre n'a pas encore créé son compte. Veuillez d'abord vous inscrire.",
+      });
+    }
 
     resetRef = db.collection('password_resets').doc(userDoc.id);
 
