@@ -1,10 +1,11 @@
 {
   "name": "ajem-notify",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Serveur d'envoi des notifications push AJEM (Vercel)",
+  "description": "Serveur AJEM (Vercel) : notifications push + réinitialisation du mot de passe par code email",
   "dependencies": {
-    "firebase-admin": "^12.0.0"
+    "firebase-admin": "^12.0.0",
+    "nodemailer": "^6.9.0"
   },
   "engines": {
     "node": ">=18"
